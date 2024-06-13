@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "class": "pixelbot.widgets.calendar.CalendarWidget"
+  },
+  "services": [
+    {
+      "class": "pixelbot.services.calendar.CalendarService",
+      "config": {
+        "calendars": [
+          {
+            "name": "Personal",
+            "color": "#0f9d58",
+            "url": "https://calendar.google.com/calendar/ical/your-email%40gmail.com/private-token-here/basic.ics",
+            "refresh": 60000
+          }
+        ]
+      }
+    }
+  ]
+}
