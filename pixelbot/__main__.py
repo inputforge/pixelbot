@@ -17,29 +17,29 @@ log = logging.getLogger(__name__)
 def main():
     logging.basicConfig(level=logging.DEBUG)
 
-    log.info('Starting PixelBot')
+    log.info("Starting PixelBot")
 
     config = load_config()
 
     manager = ServiceManager()
-    manager.load(config['services'])
+    manager.load(config["services"])
 
     app = PixelBotApp()
-    frame = Frame(parent=None, title='PixelBot')
+    frame = Frame(parent=None, title="PixelBot")
     frame.SetSize(1024, 600)
 
     renderer = Renderer()
-    widget = load_widget(config['widget'], manager)
+    widget = load_widget(config["widget"], manager)
     renderer.render(frame, widget)
 
     if widget.update_interval:
-        print('Starting timer')
+        print("Starting timer")
         app.timer = Timer(frame)
         frame.Bind(EVT_TIMER, lambda _: renderer.update())
         app.timer.Start(widget.update_interval)
 
     def on_close(*_, **__):
-        log.info('Closing PixelBot')
+        log.info("Closing PixelBot")
         frame.Destroy()
         manager.stop()
         app.ExitMainLoop()
@@ -50,8 +50,8 @@ def main():
 
     frame.Show()
     app.MainLoop()
-    log.info('PixelBot shutdown')
+    log.info("PixelBot shutdown")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

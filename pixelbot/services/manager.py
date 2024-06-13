@@ -5,7 +5,7 @@ from typing import TypeVar
 from pixelbot.services.base import Service
 from pixelbot.utils import load_class
 
-T = TypeVar('T', bound=Service)
+T = TypeVar("T", bound=Service)
 
 
 class ServiceManager:
@@ -16,8 +16,8 @@ class ServiceManager:
 
     def load(self, config: list[dict[str, Any]]) -> None:
         for service in config:
-            service_class = load_class(service['class'])
-            service_config = service.get('config', {})
+            service_class = load_class(service["class"])
+            service_config = service.get("config", {})
             self.register(service_class(service_config))
 
     def get(self, service_class: type[T]) -> T:
@@ -25,7 +25,7 @@ class ServiceManager:
             if isinstance(service, service_class):
                 return service
 
-        raise ValueError(f'Service {service_class} not found')
+        raise ValueError(f"Service {service_class} not found")
 
     def register(self, service: Service) -> None:
         self._services.append(service)

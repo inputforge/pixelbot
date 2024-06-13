@@ -44,7 +44,12 @@ class Renderer:
 
         for child in control.children:
             value = self._render_control(child, panel)
-            sizer.Add(value, proportion=child.bias, flag=self._get_flags(control), border=control.border)
+            sizer.Add(
+                value,
+                proportion=child.bias,
+                flag=self._get_flags(control),
+                border=control.border,
+            )
 
         return sizer
 
@@ -60,7 +65,7 @@ class Renderer:
         elif isinstance(control, If):
             return self._render_if(control, panel)
         else:
-            raise NotImplementedError(f'Control {control} is not supported')
+            raise NotImplementedError(f"Control {control} is not supported")
 
     def render(self, frame: Frame, widget: Widget):
         screen = widget.create_screen()
@@ -73,7 +78,7 @@ class Renderer:
         text.SetFont(Font(FontInfo(control.font.size).FaceName(control.font.name)))
 
         if is_dynamic:
-            self.dynamic_controls.append((text, 'SetLabel', control.text))
+            self.dynamic_controls.append((text, "SetLabel", control.text))
 
         return text
 
@@ -88,7 +93,9 @@ class Renderer:
     def _render_screen(self, screen: Screen, frame: Frame):
         panel = Panel(frame)
         sizer = WrapSizer()
-        sizer.Add(self._render_control(screen.root, panel), flag=ALL, border=screen.border)
+        sizer.Add(
+            self._render_control(screen.root, panel), flag=ALL, border=screen.border
+        )
         panel.SetSizer(sizer)
 
     def _render_image(self, control: Image, panel: Panel):
@@ -98,12 +105,16 @@ class Renderer:
     def _render_scroll_text(self, control, panel):
         is_dynamic = callable(control.text)
 
-        ticker = Ticker(text=control.text() if is_dynamic else control.text, parent=panel, ppf=control.ppf,
-                        fps=control.fps)
+        ticker = Ticker(
+            text=control.text() if is_dynamic else control.text,
+            parent=panel,
+            ppf=control.ppf,
+            fps=control.fps,
+        )
         ticker.SetFont(Font(FontInfo(control.font.size).FaceName(control.font.name)))
 
         if is_dynamic:
-            self.dynamic_controls.append((ticker, 'SetText', control.text))
+            self.dynamic_controls.append((ticker, "SetText", control.text))
 
         return ticker
 

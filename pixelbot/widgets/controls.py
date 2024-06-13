@@ -12,10 +12,10 @@ from pixelbot.widgets.fonts import Fonts
 
 
 class Alignment(Enum):
-    START = 'start'
-    CENTER = 'center'
-    END = 'end'
-    STRETCH = 'stretch'
+    START = "start"
+    CENTER = "center"
+    END = "end"
+    STRETCH = "stretch"
 
 
 @dataclass(frozen=True, kw_only=True)
