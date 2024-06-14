@@ -11,10 +11,12 @@ from wx import HORIZONTAL
 from wx import VERTICAL
 from wx import Bitmap
 from wx import BoxSizer
+from wx import Colour
 from wx import Font
 from wx import FontInfo
 from wx import Frame
 from wx import Panel
+from wx import Size
 from wx import Sizer
 from wx import StaticBitmap
 from wx import StaticText
@@ -22,6 +24,7 @@ from wx import WrapSizer
 from wx.lib.ticker import Ticker
 
 from pixelbot.widgets.base import Widget
+from pixelbot.widgets.color import Color
 from pixelbot.widgets.controls import Alignment
 from pixelbot.widgets.controls import Container
 from pixelbot.widgets.controls import Control
@@ -31,6 +34,10 @@ from pixelbot.widgets.controls import Screen
 from pixelbot.widgets.controls import ScrollText
 from pixelbot.widgets.controls import Text
 from pixelbot.widgets.controls import VBox
+
+
+def _color(c: Color):
+    return Colour(c.red, c.green, c.blue, c.alpha)
 
 
 class Renderer:
@@ -73,7 +80,13 @@ class Renderer:
         is_dynamic = callable(control.text)
 
         text = StaticText(panel, label=control.text() if is_dynamic else control.text)
-        text.SetFont(Font(FontInfo(control.font.size).FaceName(control.font.name)))
+        text.SetFont(
+            Font(
+                FontInfo(Size(control.font.size, control.font.size)).FaceName(
+                    control.font.name
+                )
+            )
+        )
 
         if control.wrap:
             text.Wrap(control.wrap)
@@ -98,6 +111,8 @@ class Renderer:
             self._render_control(screen.root, panel), flag=ALL, border=screen.border
         )
         panel.SetSizer(sizer)
+        panel.SetBackgroundColour(_color(screen.background))
+        frame.SetForegroundColour(_color(screen.foreground))
 
     def _render_image(self, control: Image, panel: Panel):
         bitmap = Bitmap(control.src, BITMAP_TYPE_ANY)

@@ -37,6 +37,8 @@ class Container(Control):
 class Screen:
     root: Container
     border: int = 0
+    background: Color = rgb(255, 255, 255)
+    foreground: Color = rgb(0, 0, 0)
 
 
 class VBox(Container):

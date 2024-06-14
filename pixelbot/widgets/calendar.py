@@ -9,6 +9,7 @@ from babel.dates import format_timedelta
 
 from pixelbot.services.calendar import CalendarService
 from pixelbot.widgets.base import Widget
+from pixelbot.widgets.color import rgb
 from pixelbot.widgets.controls import HBox
 from pixelbot.widgets.controls import If
 from pixelbot.widgets.controls import Image
@@ -32,7 +33,7 @@ class CalendarWidget(Widget):
         return format_time(datetime.now(), "h:mm a", locale=self.locale)
 
     def __get_current_date(self):
-        return format_date(datetime.now(), "MMMd", locale=self.locale)
+        return format_date(datetime.now(), "MMM d", locale=self.locale)
 
     def __has_next_event(self):
         return self.calendar_service.next_event is not None
@@ -58,8 +59,8 @@ class CalendarWidget(Widget):
                 HBox(
                     Image("calendar.png", bias=0),
                     VBox(
-                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(72)),
-                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(56)),
+                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(100)),
+                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(64)),
                     ),
                 ),
                 If(
@@ -69,8 +70,12 @@ class CalendarWidget(Widget):
                         Text(self.__get_next_event_name, font=Fonts.SILKSREEN.size(72)),
                         Text(self.__get_next_event_date, font=Fonts.SILKSREEN.size(56)),
                     ),
-                    Text("Your day is clear!", font=Fonts.SILKSREEN.size(64), wrap=980),
+                    Text(
+                        "Your day is clear :)", font=Fonts.SILKSREEN.size(120), wrap=980
+                    ),
                 ),
             ),
             border=25,
+            background=rgb(0, 0, 0),
+            foreground=rgb(255, 255, 255),
         )
