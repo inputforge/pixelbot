@@ -1,8 +1,8 @@
+from collections.abc import Callable
+from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
-from typing import Callable
-from typing import Iterable
 
 from pixelbot.widgets.color import Color
 from pixelbot.widgets.color import rgb
@@ -51,6 +51,7 @@ class HBox(Container):
 class Text(Control):
     text: str | Callable[[], str]
     font: Font = Fonts.SILKSREEN
+    wrap: int | None = None
 
 
 @dataclass(frozen=True)

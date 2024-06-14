@@ -1,11 +1,11 @@
 import logging
+from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from time import sleep
 from typing import Any
-from typing import Iterator
 
 import requests
 from icalendar import Calendar
@@ -66,6 +66,7 @@ class CalendarService(Service):
         super().__init__()
         self.calendars = config["calendars"]
         self.__next_events = []
+        self.__last_update = 0
 
     @property
     def next_event(self):
@@ -75,6 +76,9 @@ class CalendarService(Service):
         )
 
     def update(self):
+        if (datetime.now().timestamp() - self.__last_update) < 300:
+            return
+
         log.info("Updating calendar data")
         # Update the calendar data from  the configured iCal feeds
         self.__next_events = sorted(
@@ -85,8 +89,9 @@ class CalendarService(Service):
             ),
             key=lambda event: event.start,
         )
+        self.__last_update = datetime.now().timestamp()
 
     def run(self):
         while not self._stop_requested:
             self.update()
-            sleep(300)
+            sleep(1)

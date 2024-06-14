@@ -1,8 +1,8 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from babel import default_locale
 from babel import Locale
+from babel import default_locale
 from babel.dates import format_date
 from babel.dates import format_time
 from babel.dates import format_timedelta
@@ -69,7 +69,7 @@ class CalendarWidget(Widget):
                         Text(self.__get_next_event_name, font=Fonts.SILKSREEN.size(72)),
                         Text(self.__get_next_event_date, font=Fonts.SILKSREEN.size(56)),
                     ),
-                    Text("Your day is clear!", font=Fonts.SILKSREEN.size(64)),
+                    Text("Your day is clear!", font=Fonts.SILKSREEN.size(64), wrap=980),
                 ),
             ),
             border=25,

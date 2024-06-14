@@ -1,25 +1,23 @@
+from collections.abc import Callable
 from typing import Any
-from typing import Callable
-from typing import List
-from typing import Tuple
 
 from wx import ALIGN_CENTER
 from wx import ALIGN_LEFT
 from wx import ALIGN_RIGHT
 from wx import ALL
-from wx import Bitmap
 from wx import BITMAP_TYPE_ANY
-from wx import BoxSizer
 from wx import EXPAND
+from wx import HORIZONTAL
+from wx import VERTICAL
+from wx import Bitmap
+from wx import BoxSizer
 from wx import Font
 from wx import FontInfo
 from wx import Frame
-from wx import HORIZONTAL
 from wx import Panel
 from wx import Sizer
 from wx import StaticBitmap
 from wx import StaticText
-from wx import VERTICAL
 from wx import WrapSizer
 from wx.lib.ticker import Ticker
 
@@ -37,7 +35,7 @@ from pixelbot.widgets.controls import VBox
 
 class Renderer:
     def __init__(self):
-        self.dynamic_controls: List[Callable | Tuple[Any, str, Callable[[], Any]]] = []
+        self.dynamic_controls: list[Callable | tuple[Any, str, Callable[[], Any]]] = []
 
     def _render_container(self, control: Container, panel: Panel) -> Sizer:
         sizer = BoxSizer(VERTICAL if isinstance(control, VBox) else HORIZONTAL)
@@ -76,6 +74,9 @@ class Renderer:
 
         text = StaticText(panel, label=control.text() if is_dynamic else control.text)
         text.SetFont(Font(FontInfo(control.font.size).FaceName(control.font.name)))
+
+        if control.wrap:
+            text.Wrap(control.wrap)
 
         if is_dynamic:
             self.dynamic_controls.append((text, "SetLabel", control.text))

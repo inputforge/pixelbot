@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from wx import EVT_CLOSE
 from wx import EVT_TIMER
@@ -14,7 +15,7 @@ from pixelbot.widgets.renderer import Renderer
 log = logging.getLogger(__name__)
 
 
-def main():
+def main(args: list[str] = None):
     logging.basicConfig(level=logging.DEBUG)
 
     log.info("Starting PixelBot")
@@ -26,7 +27,11 @@ def main():
 
     app = PixelBotApp()
     frame = Frame(parent=None, title="PixelBot")
-    frame.SetSize(1024, 600)
+
+    if args and args[0] == "--fullscreen":
+        frame.ShowFullScreen(True)
+    else:
+        frame.SetSize((1024, 600))
 
     renderer = Renderer()
     widget = load_widget(config["widget"], manager)
@@ -54,4 +59,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
