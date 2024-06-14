@@ -9,10 +9,10 @@ from wx import Timer
 from pixelbot.app import PixelBotApp
 from pixelbot.config import load_config
 from pixelbot.services.manager import ServiceManager
+from pixelbot.ui.renderer import Renderer
 from pixelbot.widgets.loader import load_widget
-from pixelbot.widgets.renderer import Renderer
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("pixelbot.__main__")
 
 
 def main(args: list[str] = None):

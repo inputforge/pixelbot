@@ -1,7 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from pixelbot.widgets.controls import Screen
+from pixelbot.ui.controls import Screen
 
 
 class Widget(ABC):

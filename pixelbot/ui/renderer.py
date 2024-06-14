@@ -1,9 +1,12 @@
 from collections.abc import Callable
 from typing import Any
 
-from wx import ALIGN_CENTER
+from wx import ALIGN_BOTTOM
+from wx import ALIGN_CENTER_HORIZONTAL
+from wx import ALIGN_CENTER_VERTICAL
 from wx import ALIGN_LEFT
 from wx import ALIGN_RIGHT
+from wx import ALIGN_TOP
 from wx import ALL
 from wx import BITMAP_TYPE_ANY
 from wx import EXPAND
@@ -23,17 +26,19 @@ from wx import StaticText
 from wx import WrapSizer
 from wx.lib.ticker import Ticker
 
+from pixelbot.ui.color import Color
+from pixelbot.ui.color import rgb
+from pixelbot.ui.controls import Alignment
+from pixelbot.ui.controls import Container
+from pixelbot.ui.controls import Control
+from pixelbot.ui.controls import If
+from pixelbot.ui.controls import Image
+from pixelbot.ui.controls import Screen
+from pixelbot.ui.controls import ScrollText
+from pixelbot.ui.controls import Spacer
+from pixelbot.ui.controls import Text
+from pixelbot.ui.controls import VBox
 from pixelbot.widgets.base import Widget
-from pixelbot.widgets.color import Color
-from pixelbot.widgets.controls import Alignment
-from pixelbot.widgets.controls import Container
-from pixelbot.widgets.controls import Control
-from pixelbot.widgets.controls import If
-from pixelbot.widgets.controls import Image
-from pixelbot.widgets.controls import Screen
-from pixelbot.widgets.controls import ScrollText
-from pixelbot.widgets.controls import Text
-from pixelbot.widgets.controls import VBox
 
 
 def _color(c: Color):
@@ -52,7 +57,7 @@ class Renderer:
             sizer.Add(
                 value,
                 proportion=child.bias,
-                flag=self._get_flags(control),
+                flag=self._get_flags(child),
                 border=control.border,
             )
 
@@ -69,6 +74,8 @@ class Renderer:
             return self._render_image(control, panel)
         elif isinstance(control, If):
             return self._render_if(control, panel)
+        elif isinstance(control, Spacer):
+            return self._render_spacer(control, panel)
         else:
             raise NotImplementedError(f"Control {control} is not supported")
 
@@ -112,7 +119,7 @@ class Renderer:
         )
         panel.SetSizer(sizer)
         panel.SetBackgroundColour(_color(screen.background))
-        frame.SetForegroundColour(_color(screen.foreground))
+        panel.SetForegroundColour(_color(screen.foreground))
 
     def _render_image(self, control: Image, panel: Panel):
         bitmap = Bitmap(control.src, BITMAP_TYPE_ANY)
@@ -135,19 +142,28 @@ class Renderer:
         return ticker
 
     def _get_flags(self, control: Control) -> int:
-        flag = 0
+        flag = ALL
 
-        if control.border:
-            flag |= ALL
+        # if control.border:
+        #     flag |= ALL
 
-        if control.align == Alignment.STRETCH:
+        if control.horizontal_alignment == Alignment.STRETCH:
             flag |= EXPAND
-        elif control.align == Alignment.CENTER:
-            flag |= ALIGN_CENTER
-        elif control.align == Alignment.START:
+        elif control.horizontal_alignment == Alignment.CENTER:
+            flag |= ALIGN_CENTER_HORIZONTAL
+        elif control.horizontal_alignment == Alignment.START:
             flag |= ALIGN_LEFT
-        elif control.align == Alignment.END:
+        elif control.horizontal_alignment == Alignment.END:
             flag |= ALIGN_RIGHT
+
+        if control.vertical_alignment == Alignment.STRETCH:
+            flag |= EXPAND
+        elif control.vertical_alignment == Alignment.CENTER:
+            flag |= ALIGN_CENTER_VERTICAL
+        elif control.vertical_alignment == Alignment.START:
+            flag |= ALIGN_TOP
+        elif control.vertical_alignment == Alignment.END:
+            flag |= ALIGN_BOTTOM
 
         return flag
 
@@ -174,3 +190,12 @@ class Renderer:
         self.dynamic_controls.append(_update)
         _update()
         return sizer
+
+    def _render_spacer(self, control: Spacer, panel):
+        if control.invisible:
+            return Size(0, 0)
+
+        text = StaticText(panel, label=" ")
+        text.SetBackgroundColour(_color(rgb(255, 0, 0)))
+        text.SetForegroundColour(_color(rgb(0, 0, 255)))
+        return text

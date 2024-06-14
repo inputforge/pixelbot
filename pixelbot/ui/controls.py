@@ -4,11 +4,11 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from pixelbot.widgets.color import Color
-from pixelbot.widgets.color import rgb
-from pixelbot.widgets.color import rgba
-from pixelbot.widgets.fonts import Font
-from pixelbot.widgets.fonts import Fonts
+from pixelbot.ui.color import Color
+from pixelbot.ui.color import rgb
+from pixelbot.ui.color import rgba
+from pixelbot.ui.fonts import Font
+from pixelbot.ui.fonts import Fonts
 
 
 class Alignment(Enum):
@@ -21,7 +21,8 @@ class Alignment(Enum):
 @dataclass(frozen=True, kw_only=True)
 class Control:
     border: int = 0
-    align: Alignment = Alignment.START
+    horizontal_alignment: Alignment = Alignment.START
+    vertical_alignment: Alignment = Alignment.START
     bias: int = 1
 
 
@@ -47,6 +48,11 @@ class VBox(Container):
 
 class HBox(Container):
     pass
+
+
+@dataclass(frozen=True)
+class Spacer(Control):
+    invisible: bool = True
 
 
 @dataclass(frozen=True)

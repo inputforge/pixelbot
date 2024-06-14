@@ -10,9 +10,10 @@ T = TypeVar("T", bound=Service)
 
 class ServiceManager:
     def __init__(self) -> None:
-        self._services = []
+        self._services = {}
         self._started = False
         self._threads = []
+        self._needs = set()
 
     def load(self, config: list[dict[str, Any]]) -> None:
         for service in config:
@@ -21,20 +22,21 @@ class ServiceManager:
             self.register(service_class(service_config))
 
     def get(self, service_class: type[T]) -> T:
-        for service in self._services:
-            if isinstance(service, service_class):
-                return service
+        if service_class in self._services:
+            self._needs.add(service_class)
+            return self._services[service_class]
 
         raise ValueError(f"Service {service_class} not found")
 
     def register(self, service: Service) -> None:
-        self._services.append(service)
+        self._services[service.__class__] = service
 
     def start(self) -> None:
         if self._started:
             return
 
-        for service in self._services:
+        for service_class in self._needs:
+            service = self._services[service_class]
             thread = Thread(target=service.start)
             thread.start()
             self._threads.append(thread)
@@ -42,7 +44,7 @@ class ServiceManager:
         self._started = True
 
     def stop(self) -> None:
-        for service in self._services:
+        for service in self._services.values():
             service.stop()
 
         for thread in self._threads:
