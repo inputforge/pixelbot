@@ -35,9 +35,9 @@ other Debian-based distributions.
         python3-requests \
         python3-icalendar
       ```
+    - Contrary to established practice, we don't use a virtual environment here as some pre-compiled
+      wheels are not available for aarch64 and we don't want to compile them on the Raspberry Pi.
 2. Clone the repository
-   Contrary to established practice, we don't use a virtual environment as some pre-compiled wheels are not available
-   for aarch64 and we don't want to compile them on the Raspberry Pi.
 3. Run `python3 -m pixelbot --fullscreen` to start the application.
 
 ## Widgets
