@@ -45,7 +45,14 @@ other Debian-based distributions.
 Pixelbot comes with a few widgets out of the box.
 You can add more by creating a new widget in the `widgets` directory.
 
+### Clock
+
+Shows the current time.
+
+![Screenshot](screenshots/clock.png)
+
 ### Calendar
 
 Shows the next event in your calendar.
+
 ![Screenshot](screenshots/calendar.png)
