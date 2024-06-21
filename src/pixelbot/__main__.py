@@ -25,15 +25,15 @@ log = logging.getLogger("pixelbot.__main__")
 
 
 def main(argv: list[str] = None):
-    logging.basicConfig(level=logging.DEBUG)
-    log.info("Starting PixelBot")
-
     argparse = ArgumentParser()
     argparse.add_argument("--debug", action="store_true", help="Enable debug mode")
     argparse.add_argument(
         "--fullscreen", action="store_true", help="Start in fullscreen mode"
     )
     args = argparse.parse_args(argv)
+
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+    log.info("Starting PixelBot")
 
     config = load_config()
 
@@ -42,9 +42,14 @@ def main(argv: list[str] = None):
     widget = load_widget(config["widget"], manager)
     manager.start()
 
-    run_skia(widget, args.debug, args.fullscreen)
+    try:
+        run_skia(widget, args.debug, args.fullscreen)
+    except KeyboardInterrupt:
+        log.info("Received keyboard interrupt, shutting down")
 
+    log.info("Shutting down services")
     manager.stop()
+    log.info("PixelBot stopped")
 
 
 WIDTH, HEIGHT = 1024, 600
@@ -54,6 +59,7 @@ WIDTH, HEIGHT = 1024, 600
 def glfw_window(fullscreen: bool):
     if not glfw.init():
         raise RuntimeError("glfw.init() failed")
+
     glfw.window_hint(glfw.STENCIL_BITS, 8)
 
     if fullscreen:
@@ -64,9 +70,12 @@ def glfw_window(fullscreen: bool):
     window = glfw.create_window(WIDTH, HEIGHT, "Pixelbot", monitor, None)
 
     glfw.make_context_current(window)
-    yield window
-    glfw.destroy_window(window)
-    glfw.terminate()
+
+    try:
+        yield window
+    finally:
+        glfw.destroy_window(window)
+        glfw.terminate()
 
 
 @contextmanager
@@ -88,8 +97,11 @@ def skia_surface(window):
         ColorSpace.MakeSRGB(),
     )
     assert surface is not None
-    yield surface
-    context.abandonContext()
+    try:
+        yield surface
+    finally:
+        del surface
+        context.abandonContext()
 
 
 def run_skia(widget: Widget, debug: bool, fullscreen: bool):
@@ -109,6 +121,7 @@ def run_skia(widget: Widget, debug: bool, fullscreen: bool):
                 )
 
                 def _render():
+                    canvas.clear(0xFF000000)
                     renderer.render(
                         canvas, widget, Rect(0, 0, surface.width(), surface.height())
                     )

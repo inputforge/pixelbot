@@ -6,13 +6,12 @@ from skia import Rect
 from skia import Typeface
 
 from pixelbot.ui import controls
+from pixelbot.ui.backends.skia.box import Box
 from pixelbot.ui.backends.skia.context import Context
 from pixelbot.ui.backends.skia.context import ctx
-from pixelbot.ui.backends.skia.hbox import HBox
 from pixelbot.ui.backends.skia.Image import Image
 from pixelbot.ui.backends.skia.spacer import Spacer
 from pixelbot.ui.backends.skia.static_text import StaticText
-from pixelbot.ui.backends.skia.vbox import VBox
 from pixelbot.widgets.base import Widget
 
 log = logging.getLogger(__name__)
@@ -37,11 +36,12 @@ class SkiaRenderer:
             screen = widget.create_screen()
 
             control = self._render_screen(screen)
+            border = screen.border * self.context.dppx
             screen_bounds = Rect(
-                screen.border,
-                screen.border,
-                bounds.width() - screen.border,
-                bounds.height() - screen.border,
+                border,
+                border,
+                bounds.width() - border,
+                bounds.height() - border,
             )
             control.layout(screen_bounds)
             control.render(canvas)
@@ -52,10 +52,14 @@ class SkiaRenderer:
     def _render_control(self, control: controls.Control):
         if isinstance(control, controls.HBox):
             children = [self._render_control(child) for child in control.children]
-            return HBox(children, align=control.align)
+            return Box(
+                "horizontal", children, align=control.align, justify=control.justify
+            )
         elif isinstance(control, controls.VBox):
             children = [self._render_control(child) for child in control.children]
-            return VBox(children, align=control.align)
+            return Box(
+                "vertical", children, align=control.align, justify=control.justify
+            )
         elif isinstance(control, controls.Text):
             text = control.text() if callable(control.text) else control.text
             typeface = Typeface(control.font.name)

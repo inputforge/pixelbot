@@ -59,8 +59,8 @@ class CalendarWidget(Widget):
                 HBox(
                     Image(
                         {
-                            1: "pixelbot/resources/calendar.png",
-                            2: "pixelbot/resources/calendar-2x.png",
+                            1: "resources/calendar.png",
+                            2: "resources/calendar-2x.png",
                         }
                     ),
                     VBox(
@@ -75,7 +75,7 @@ class CalendarWidget(Widget):
                         Text(self.__get_next_event_name, font=Fonts.SILKSREEN.size(72)),
                         Text(self.__get_next_event_date, font=Fonts.SILKSREEN.size(56)),
                     ),
-                    HBox(
+                    VBox(
                         Text(
                             "Your day is clear :)",
                             font=Fonts.SILKSREEN.size(72),
@@ -83,6 +83,8 @@ class CalendarWidget(Widget):
                         align="center",
                     ),
                 ),
+                align="stretch",
+                justify="stretch",
             ),
             border=25,
             background=rgb(0, 0, 0),

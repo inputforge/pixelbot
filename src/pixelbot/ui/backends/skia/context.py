@@ -16,7 +16,7 @@ class Context:
 
     @property
     def dppx(self) -> float:
-        return self.actual_width / self.screen_width
+        return int(round(self.actual_width / self.screen_width))
 
 
 current_ctx: ContextVar[Context] = ContextVar("current_context")

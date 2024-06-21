@@ -2,23 +2,18 @@ from collections.abc import Callable
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any
-from typing import Literal
 
+from pixelbot.ui.alignment import Alignment
 from pixelbot.ui.color import Color
 from pixelbot.ui.color import rgb
 from pixelbot.ui.color import rgba
 from pixelbot.ui.fonts import Font
 from pixelbot.ui.fonts import Fonts
 
-Alignment = Literal["start", "center", "end", "stretch"]
-
 
 @dataclass(frozen=True, kw_only=True)
 class Control:
-    border: int = 0
-    horizontal_alignment: Alignment = "start"
-    vertical_alignment: Alignment = "start"
-    bias: int = 1
+    pass
 
 
 class Container(Control):

@@ -31,7 +31,7 @@ class StaticText(Drawable):
     @property
     def min_size(self):
         _, width = self.text_bounds
-        return Size(width, self.font.getSize())
+        return Size(round(width), self.font.getSize())
 
     def _draw(self, canvas: Canvas):
         if self.bounds is None:

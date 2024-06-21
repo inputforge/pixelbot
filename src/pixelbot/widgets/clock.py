@@ -6,7 +6,6 @@ from babel.dates import format_date
 from babel.dates import format_time
 
 from pixelbot.ui.color import rgb
-from pixelbot.ui.controls import Alignment
 from pixelbot.ui.controls import Screen
 from pixelbot.ui.controls import Text
 from pixelbot.ui.controls import VBox
@@ -34,17 +33,14 @@ class ClockWidget(Widget):
             VBox(
                 Text(
                     text=self.__get_current_time,
-                    font=Fonts.SILKSREEN.size(325),
-                    horizontal_alignment=Alignment.CENTER,
-                    vertical_alignment=Alignment.CENTER,
+                    font=Fonts.SILKSREEN.size(150),
                 ),
                 Text(
                     text=self.__get_current_date,
-                    font=Fonts.SILKSREEN.size(100),
-                    horizontal_alignment=Alignment.CENTER,
-                    vertical_alignment=Alignment.CENTER,
+                    font=Fonts.SILKSREEN.size(50),
                 ),
-                align=Alignment.CENTER,
+                align="center",
+                justify="center",
             ),
             border=25,
             background=rgb(0, 0, 0),
