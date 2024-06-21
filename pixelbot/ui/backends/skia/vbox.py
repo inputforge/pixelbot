@@ -5,8 +5,6 @@ from pixelbot.ui.backends.skia.box import Box
 
 
 class VBox(Box):
-    debug = True
-
     @property
     def min_size(self):
         width = 0
