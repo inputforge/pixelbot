@@ -1,8 +1,8 @@
 from collections.abc import Callable
 from collections.abc import Iterable
 from dataclasses import dataclass
-from enum import Enum
 from typing import Any
+from typing import Literal
 
 from pixelbot.ui.color import Color
 from pixelbot.ui.color import rgb
@@ -10,19 +10,14 @@ from pixelbot.ui.color import rgba
 from pixelbot.ui.fonts import Font
 from pixelbot.ui.fonts import Fonts
 
-
-class Alignment(Enum):
-    START = "start"
-    CENTER = "center"
-    END = "end"
-    STRETCH = "stretch"
+Alignment = Literal["start", "center", "end", "stretch"]
 
 
 @dataclass(frozen=True, kw_only=True)
 class Control:
     border: int = 0
-    horizontal_alignment: Alignment = Alignment.START
-    vertical_alignment: Alignment = Alignment.START
+    horizontal_alignment: Alignment = "start"
+    vertical_alignment: Alignment = "start"
     bias: int = 1
 
 
@@ -42,11 +37,24 @@ class Screen:
     foreground: Color = rgb(0, 0, 0)
 
 
-class VBox(Container):
+class Box(Container):
+    def __init__(
+        self,
+        *children: Control,
+        align: Alignment = "start",
+        justify: Alignment = "start",
+        **kwargs: Any,
+    ):
+        super().__init__(*children, **kwargs)
+        self.align = align
+        self.justify = justify
+
+
+class VBox(Box):
     pass
 
 
-class HBox(Container):
+class HBox(Box):
     pass
 
 
@@ -74,7 +82,7 @@ class ScrollText(Control):
 
 @dataclass(frozen=True)
 class Image(Control):
-    src: str
+    src: str | dict[int, str]
 
 
 @dataclass(frozen=True)

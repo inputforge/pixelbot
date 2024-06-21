@@ -7,9 +7,7 @@ from babel.dates import format_time
 
 from pixelbot.ui.color import rgb
 from pixelbot.ui.controls import Alignment
-from pixelbot.ui.controls import HBox
 from pixelbot.ui.controls import Screen
-from pixelbot.ui.controls import Spacer
 from pixelbot.ui.controls import Text
 from pixelbot.ui.controls import VBox
 from pixelbot.ui.fonts import Fonts
@@ -33,25 +31,20 @@ class ClockWidget(Widget):
 
     def create_screen(self) -> Screen:
         return Screen(
-            HBox(
-                Spacer(),
-                VBox(
-                    Text(
-                        text=self.__get_current_time,
-                        font=Fonts.SILKSREEN.size(325),
-                        horizontal_alignment=Alignment.CENTER,
-                        vertical_alignment=Alignment.CENTER,
-                    ),
-                    Text(
-                        text=self.__get_current_date,
-                        font=Fonts.SILKSREEN.size(100),
-                        horizontal_alignment=Alignment.CENTER,
-                        vertical_alignment=Alignment.CENTER,
-                    ),
+            VBox(
+                Text(
+                    text=self.__get_current_time,
+                    font=Fonts.SILKSREEN.size(325),
                     horizontal_alignment=Alignment.CENTER,
                     vertical_alignment=Alignment.CENTER,
                 ),
-                Spacer(),
+                Text(
+                    text=self.__get_current_date,
+                    font=Fonts.SILKSREEN.size(100),
+                    horizontal_alignment=Alignment.CENTER,
+                    vertical_alignment=Alignment.CENTER,
+                ),
+                align=Alignment.CENTER,
             ),
             border=25,
             background=rgb(0, 0, 0),

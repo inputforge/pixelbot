@@ -57,21 +57,31 @@ class CalendarWidget(Widget):
         return Screen(
             VBox(
                 HBox(
-                    Image("pixelbot/resources/calendar.png", bias=0),
+                    Image(
+                        {
+                            1: "pixelbot/resources/calendar.png",
+                            2: "pixelbot/resources/calendar-2x.png",
+                        }
+                    ),
                     VBox(
-                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(100)),
-                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(64)),
+                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(250)),
+                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(150)),
                     ),
                 ),
                 If(
                     self.__has_next_event,
                     VBox(
-                        Text("Next event", font=Fonts.SILKSREEN.size(48)),
+                        Text("Next event", font=Fonts.SILKSREEN.size(64)),
                         Text(self.__get_next_event_name, font=Fonts.SILKSREEN.size(72)),
                         Text(self.__get_next_event_date, font=Fonts.SILKSREEN.size(56)),
                     ),
-                    Text(
-                        "Your day is clear :)", font=Fonts.SILKSREEN.size(120), wrap=980
+                    HBox(
+                        Text(
+                            "Your day is clear :)",
+                            font=Fonts.SILKSREEN.size(144),
+                            wrap=980,
+                        ),
+                        align="center",
                     ),
                 ),
             ),
