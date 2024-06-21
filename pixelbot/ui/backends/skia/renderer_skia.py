@@ -7,7 +7,7 @@ from skia import Typeface
 
 from pixelbot.ui import controls
 from pixelbot.ui.backends.skia.context import Context
-from pixelbot.ui.backends.skia.context import context
+from pixelbot.ui.backends.skia.context import ctx
 from pixelbot.ui.backends.skia.hbox import HBox
 from pixelbot.ui.backends.skia.Image import Image
 from pixelbot.ui.backends.skia.spacer import Spacer
@@ -18,12 +18,22 @@ from pixelbot.widgets.base import Widget
 log = logging.getLogger(__name__)
 
 
+def _choose_image(ctx: Context, path: dict[int, str]) -> str:
+    match = path[1]
+    scale = round(ctx.dppx)
+
+    for i in range(1, scale + 1):
+        match = path.get(i, match)
+
+    return match
+
+
 class SkiaRenderer:
     def __init__(self, ctx: Context):
         self.context = ctx
 
     def render(self, canvas: Canvas, widget: Widget, bounds: Rect):
-        with context(self.context):
+        with ctx(self.context):
             screen = widget.create_screen()
 
             control = self._render_screen(screen)
@@ -49,11 +59,16 @@ class SkiaRenderer:
         elif isinstance(control, controls.Text):
             text = control.text() if callable(control.text) else control.text
             typeface = Typeface(control.font.name)
-            return StaticText(text, Font(typeface, size=control.font.size))
+            size = control.font.size * self.context.dppx
+            return StaticText(text, Font(typeface, size=size))
         elif isinstance(control, controls.Spacer):
             return Spacer()
         elif isinstance(control, controls.Image):
-            return Image(control.src)
+            return Image(
+                control.src
+                if isinstance(control.src, str)
+                else _choose_image(self.context, control.src)
+            )
         elif isinstance(control, controls.If):
             return (
                 self._render_control(control.then)

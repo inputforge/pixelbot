@@ -64,8 +64,8 @@ class CalendarWidget(Widget):
                         }
                     ),
                     VBox(
-                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(250)),
-                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(150)),
+                        Text(self.__get_current_time, font=Fonts.SILKSREEN.size(125)),
+                        Text(self.__get_current_date, font=Fonts.SILKSREEN.size(75)),
                     ),
                 ),
                 If(
@@ -78,8 +78,7 @@ class CalendarWidget(Widget):
                     HBox(
                         Text(
                             "Your day is clear :)",
-                            font=Fonts.SILKSREEN.size(144),
-                            wrap=980,
+                            font=Fonts.SILKSREEN.size(72),
                         ),
                         align="center",
                     ),

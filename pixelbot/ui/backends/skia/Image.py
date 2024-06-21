@@ -4,30 +4,13 @@ from skia import Canvas
 from skia import Image as SkiaImage
 from skia import Size
 
-from pixelbot.ui.backends.skia.context import current_context
 from pixelbot.ui.backends.skia.drawable import Drawable
 
 
-def choose_image(path: dict[int, str]) -> str:
-    context = current_context()
-    dppx = context.dppx
-
-    iterator = iter(sorted(path.items()))
-    best_match = next(iterator)[1]
-
-    for scale, image_path in iterator:
-        if scale <= dppx:
-            best_match = image_path
-        else:
-            break
-
-    return best_match
-
-
 class Image(Drawable):
-    def __init__(self, path: str | dict[int, str]):
+    def __init__(self, path: str):
         super().__init__()
-        self.path = path if isinstance(path, str) else choose_image(path)
+        self.path = path
 
     @cached_property
     def _skia_image(self):

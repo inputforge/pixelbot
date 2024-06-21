@@ -23,7 +23,7 @@ current_ctx: ContextVar[Context] = ContextVar("current_context")
 
 
 @contextmanager
-def context(ctx: Context):
+def ctx(ctx: Context):
     token = current_ctx.set(ctx)
     yield
     current_ctx.reset(token)
